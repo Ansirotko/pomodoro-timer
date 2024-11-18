@@ -1,12 +1,12 @@
 let totalSeconds = 1500;
 let isPomodoro = true;
 const timerElement = document.querySelector('#pomodoro-time');
-let timer;
+var timer;
 
 function timeFormat(seconds) {
     let minutes = Math.floor(seconds / 60);
-    seconds = seconds % 60;
-    timerElement.textContent = `${minutes <10 ? '0' + minutes:minutes}:${seconds <10 ? '0' + seconds:seconds}`;
+    let remainingseconds = seconds % 60;
+    timerElement.textContent = `${minutes <10 ? '0' + minutes:minutes}:${remainingseconds <10 ? '0' + remainingseconds:remainingseconds}`;
 
 };
 
@@ -15,13 +15,16 @@ function startTimer() {
         if (totalSeconds <= 0) {
             clearInterval(timer);
             timerElement.textContent = '00:00';
-            totalSeconds = isPomodoro ? 1500 : 300;
+            totalSeconds = isPomodoro ? 300 : 1500;
+            isPomodoro = !isPomodoro
+            timeFormat(totalSeconds);
+            updateButtonStates();
             startButton.textContent = 'start';
         } else {
             totalSeconds--;
             timeFormat(totalSeconds);
         }
-    }, 1000)
+    }, 10)
 }
 
 function changeMode() {
@@ -30,11 +33,25 @@ function changeMode() {
     totalSeconds = isPomodoro ? 1500 : 300;
     timeFormat(totalSeconds);
     startButton.textContent = 'start';
+    updateButtonStates();
 }
+const pomodoroButton = document.querySelector('#pomodoro');
+const modeButton = document.querySelector('#break');
+
+function updateButtonStates() {
+    if (isPomodoro) {
+        pomodoroButton.classList.add('active');
+        modeButton.classList.remove('active');
+    } else {
+        modeButton.classList.add('active');
+        pomodoroButton.classList.remove('active');
+    }
+}
+
 
 const startButton = document.querySelector('#start');
 const resetButton = document.querySelector('#reset');
-const modeButton = document.querySelector('#break');
+
 
 startButton.addEventListener('click', function() {
     if (startButton.textContent === 'start') {
@@ -53,4 +70,7 @@ resetButton.addEventListener('click', function() {
     timeFormat(totalSeconds);
 })
 modeButton.addEventListener('click', changeMode);
+pomodoroButton.addEventListener('click', changeMode);
+
+updateButtonStates();
 timeFormat(totalSeconds);
