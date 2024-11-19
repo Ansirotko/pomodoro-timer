@@ -1,11 +1,11 @@
 let totalSeconds = 1500;
 let isPomodoro = true;
 const timerElement = document.querySelector('#pomodoro-time');
-var timer;
+let timer;
 
 function timeFormat(seconds) {
-    let minutes = Math.floor(seconds / 60);
-    let remainingseconds = seconds % 60;
+    const minutes = Math.floor(seconds / 60);
+    const remainingseconds = seconds % 60;
     timerElement.textContent = `${minutes <10 ? '0' + minutes:minutes}:${remainingseconds <10 ? '0' + remainingseconds:remainingseconds}`;
 
 };
@@ -14,11 +14,8 @@ function startTimer() {
     timer = setInterval(() => {
         if (totalSeconds <= 0) {
             clearInterval(timer);
-            timerElement.textContent = '00:00';
-            totalSeconds = isPomodoro ? 300 : 1500;
-            isPomodoro = !isPomodoro
+            totalSeconds = isPomodoro ? 1500 : 300;
             timeFormat(totalSeconds);
-            updateButtonStates();
             startButton.textContent = 'start';
         } else {
             totalSeconds--;
